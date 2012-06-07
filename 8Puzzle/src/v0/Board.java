@@ -64,10 +64,9 @@ public class Board
 	public int hamming()
 	{
 		int prioridadH=0;
-		System.out.print("Demo del metodo Hamming:\n\n");
 		for(int i = 0; i<size ; i++){
 			for(int j = 0; j<size;j++){
-				if(meta[i][j] == tiles[i][j]){
+				if(!(meta[i][j] == tiles[i][j]) && tiles[i][j] != 0){
 					prioridadH++;
 				}
 			}
@@ -79,20 +78,45 @@ public class Board
 	 * Retorna la suma de distancia Manhattan entre bloques
 	 * @return
 	 */
-	public void manhattan()
+	public int manhattan()
 	{
-		System.out.print("Demo del metodo Manhattan:\n\n");
-		int freq=0;
+		int[] indices = new int[2];//Esta variable almacena fila y columna retornados por find()
+		int prioridadM=0;
 		for(int i = 0; i<size ; i++){
 			for(int j = 0; j<size;j++){
-				if(meta[i][j] == tiles[i][j]){
-					System.out.print(meta[i][j]+"::: 1\n");
-				}else{
-					System.out.print(meta[i][j]+"::: 0\n");
+				if(!(meta[i][j] == tiles[i][j]) && tiles[i][j] != 0){
+					indices = find(tiles[i][j]);
+					prioridadM += Math.abs(indices[0] - i) + Math.abs(indices[1] - j);
 				}
 			}
-		}
-		
+		}//Fin recorrido de la matriz
+		return prioridadM + num_movimientos;		
+	}
+	
+	/**
+	 * Metodo privado que sirve a auxiliar para el metodo Mahatan.
+	 * 
+	 * Recibe el numero a buscar y retorna un arreglo de dimension dos
+	 * con la fila y la columna en donde se encuentra dicho numero dentro de la matriz
+	 * que se esta analizando. 
+	 * @param nummber
+	 * @return
+	 */
+	
+	private int[] find(int number)
+	{ 
+		int[] poss = new int[2];
+		for(int i = 0; i<size ; i++){
+			for(int j = 0; j<size;j++){
+				if((number == meta[i][j])){					
+					poss[0] = i;
+					poss[1] = j;
+					return poss;
+				}
+			}
+		}//Fin recorrido de la matriz
+		poss = null;
+		return poss;//Se retorna null en caso de estar buscando un elemento que no esta en la matriz
 	}
 	
 	/**
