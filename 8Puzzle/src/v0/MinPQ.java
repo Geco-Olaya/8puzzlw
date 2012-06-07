@@ -38,11 +38,13 @@ public class MinPQ<Key> implements Iterable<Key>
 {
 	private Key[] pq;				// Guarda items en la posicion 1 a N
 	private int N;					// Numero de items en la cola de prioridad
+	@SuppressWarnings("rawtypes")
 	private Comparator comparator;	// comparador opcional
 
 	/**
 	 * Crea una cola de prioridad vacia con la capacidad inicial dada.
 	 */
+	@SuppressWarnings("unchecked")
 	public MinPQ(int initCapacity) 
 	{
 		pq = (Key[]) new Object[initCapacity + 1];
@@ -58,6 +60,7 @@ public class MinPQ<Key> implements Iterable<Key>
 	 * Crea una cola de prioridad vacia con la capacidad inicial dada,
 	 * usando el comparador dado.
 	 */
+	@SuppressWarnings("unchecked")
 	public MinPQ(int initCapacity, Comparator<Key> comparator) 
 	{
 		this.comparator = comparator;
@@ -75,6 +78,7 @@ public class MinPQ<Key> implements Iterable<Key>
 	 * Toma un tiempo proporcional al numero de elementos usando el constructor
 	 * del montículo sink.
 	 */
+	@SuppressWarnings("unchecked")
 	public MinPQ(Key[] keys) 
 	{
 		N = keys.length;
@@ -111,6 +115,7 @@ public class MinPQ<Key> implements Iterable<Key>
 	}
 
 	// funcion de ayuda para doblar el tamaño del arreglo del montículo
+	@SuppressWarnings("unchecked")
 	private void resize(int capacity) 
 	{
 		assert capacity > N;
@@ -174,6 +179,7 @@ public class MinPQ<Key> implements Iterable<Key>
 	/***********************************************************************
 	 * Funciones de ayuda para conparar e intercambiar.
 	 **********************************************************************/
+	@SuppressWarnings("unchecked")
 	private boolean greater(int i, int j) 
 	{
 		if (comparator == null) {
@@ -226,6 +232,7 @@ public class MinPQ<Key> implements Iterable<Key>
 
 		// adiciona todos los elementos como copia al monticulo
 		// toma un tiempo lineal puesto que el monticulo esta en orden y no se mueven llaves
+		@SuppressWarnings("unchecked")
 		public HeapIterator() 
 		{
 			if (comparator == null) copy = new MinPQ<Key>(size());

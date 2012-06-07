@@ -12,14 +12,22 @@ public class Board
 	int[][] tiles;
 	int[][] meta;
 	int size;
+	int num_movimientos;
+	Board ant;
 	/**
-	 * Construye un tablero de un arreglo de bloques N*N
+	 * Construye un tablero de un arreglo de bloques N*N para solucionar.
+	 * Tambien construye la matriz meta, que sera nuestra solucion a encontrar.
+	 * 
+	 * Este es el primer constructor y se utiliza solo al inicio del analisis.
+	 * Para las demas de usara el consturctor siguiente.
 	 * @param tiles
 	 */
 	public Board(int[][] tiles)
-	{
+	{	
 		this.tiles = tiles;
-		int num = 1;
+		ant = null;
+		num_movimientos = 0;
+		int num = 1;//Variable usada para construir tablero meta
 		this.size = tiles.length;
 		meta = new int[size][size];
 		
@@ -32,26 +40,39 @@ public class Board
 				}
 				
 			}
-		}
+		}//Fin del for			
+	}
+	
+	/**
+	 * Este es el constructor por de defecto que se utiliza en el resto del juego.
+	 * 
+	 * @param tiles
+	 * @param num_movimiento
+	 * @param tiles_ant
+	 */
+	public Board(int[][] tiles, int num_movimiento, Board tiles_ant)
+	{
+		this.tiles = tiles;
+		this.num_movimientos = num_movimiento;
+		ant = tiles_ant;
 	}
 	
 	/**
 	 * Retrona el numero de bloques fuera de lugar.
 	 * @return
 	 */
-	public void hamming()
+	public int hamming()
 	{
+		int prioridadH=0;
 		System.out.print("Demo del metodo Hamming:\n\n");
 		for(int i = 0; i<size ; i++){
 			for(int j = 0; j<size;j++){
 				if(meta[i][j] == tiles[i][j]){
-					System.out.print(meta[i][j]+"::: 1\n");
-				}else{
-					System.out.print(meta[i][j]+"::: 0\n");
+					prioridadH++;
 				}
 			}
-		}
-		
+		}//Fin recorrido de la matriz
+		return prioridadH + num_movimientos;		
 	}
 	
 	/**
@@ -98,7 +119,7 @@ public class Board
 		for(int i = 0; i<size ; i++){
 			for(int j = 0; j<size;j++){
 				if(j+1 == size){
-					retorno+="\n";
+					retorno+= meta[i][j]+"\n";
 				}else{
 					retorno+= meta[i][j]+" | ";
 				}
@@ -110,7 +131,7 @@ public class Board
 		for(int i = 0; i<size ; i++){
 			for(int j = 0; j<size;j++){
 				if(j+1 == size){
-					retorno+="\n";
+					retorno+=tiles[i][j]+"\n";
 				}else{
 					retorno+= tiles[i][j]+" | ";
 				}
@@ -118,28 +139,9 @@ public class Board
 			}
 		}//fin ciclo
 		
+		retorno+= "\n\n Valor Hamming del tablero: "+hamming();
+		
 		return retorno;
-		
-	}
-	
-	public static void main(String[] args) throws FileNotFoundException
-	{
-		Scanner sc = new Scanner(System.in);
-		int size = Integer.parseInt(sc.nextLine());
-		int[][] board = new int[size][size];
-		
-		//Construye la matriz del tablero
-		for(int i = 0; i<size ; i++){
-			for(int j = 0; j<size;j++){
-				board[i][j] = sc.nextInt();
-			}
-		}
-		
-		Board bd = new Board(board);
-		bd.hamming();
-		//bd.toString();
-		
-		
 		
 	}
 	
