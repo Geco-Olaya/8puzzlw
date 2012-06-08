@@ -28,6 +28,10 @@ public class Solver {
 		return null;
 	}
 
+	private Board generarCandidatos(Board tablero)
+	{
+		return tablero;
+	}
 	
 	
 	/**
@@ -50,9 +54,19 @@ public class Solver {
 				board[i][j] = sc.nextInt();
 			}
 		}
+		/************************************************************************
+		 * FIN CAPTURA DESDE LA ENTRADA ESTANDAR PARA CONSTRUIR EL TABLERO.
+		 * 
+		 ************************************************************************/
 		
-		Board bd = new Board(board);
+		
+		
+		
+		
+		
+		Board bd = new Board(board,0,null,0);//Tablero inicial
 		System.out.print("Valor Manhatan: "+bd.manhattan()+"\nValor Hamming: "+bd.hamming());
+		Solver solve = new Solver(bd);
 		//bd.hamming();
 		//System.out.print(bd.toString());
 		

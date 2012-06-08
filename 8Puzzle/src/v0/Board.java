@@ -7,28 +7,44 @@ import java.util.Iterator;
 import java.util.Scanner;
 
 
-public class Board
+public class Board implements Comparable
 {
+	
+	/************************************************************************
+	 * 							ATRIBUTOS DEL TABLERO
+	 ************************************************************************/
+	int id;//Cada posible solucion se le dara un ID unico con el objetivo de evitar estados repetidos.
 	int[][] tiles;
-	int[][] meta;
+	int[][] meta;//Cada objeto tablero contara con un tablero solucionado para realizar operaciones
 	int size;
 	int num_movimientos;
+	int hamming=0;//Solo usaremos para esta version la prioridad Manhattan;
+	int manhattan;
 	Board ant;
-	/**
-	 * Construye un tablero de un arreglo de bloques N*N para solucionar.
-	 * Tambien construye la matriz meta, que sera nuestra solucion a encontrar.
+	/************************************************************************
+	 * 							ATRIBUTOS DEL TABLERO
+	 ************************************************************************/	
+	
+	
+	
+	/***************************************************************************
+	 * Este es el constructor del objeto board.
+	 * Para esta version se tomo la decicion de que cada objeto board
+	 * tuviera el atributo meta, que es una matriz con el resultado a encontrar
 	 * 
-	 * Este es el primer constructor y se utiliza solo al inicio del analisis.
-	 * Para las demas de usara el consturctor siguiente.
 	 * @param tiles
-	 */
-	public Board(int[][] tiles)
+	 * @param num_movimiento
+	 * @param tiles_ant
+	 ****************************************************************************/
+	public Board(int[][] tiles, int num_movimiento, Board tiles_ant,int id)
 	{	
+		this.id = id;
 		this.tiles = tiles;
-		ant = null;
-		num_movimientos = 0;
-		int num = 1;//Variable usada para construir tablero meta
 		this.size = tiles.length;
+		  ////////////////////////////////////////////////////////////
+		 ////////Inicia construccion del tablero meta////////////////
+		////////////////////////////////////////////////////////////
+		int num = 1;//Variable usada para construir tablero meta
 		meta = new int[size][size];
 		
 		for(int i = 0; i<size;i++){
@@ -40,23 +56,16 @@ public class Board
 				}
 				
 			}
-		}//Fin del for			
-	}
-	
-	/**
-	 * Este es el constructor por de defecto que se utiliza en el resto del juego.
-	 * 
-	 * @param tiles
-	 * @param num_movimiento
-	 * @param tiles_ant
-	 */
-	public Board(int[][] tiles, int num_movimiento, Board tiles_ant)
-	{
-		this.tiles = tiles;
+			
+		}//Fin de la construccion del tablero meta.
 		this.num_movimientos = num_movimiento;
-		ant = tiles_ant;
+		if(num_movimientos != 0) {ant = tiles_ant;}
+		else{ant = null;}
+		manhattan = manhattan();
 	}
-	
+	/**************************************************************************
+	 * 							FIN DEL CONSTRUCTOR
+	 *************************************************************************/
 	/**
 	 * Retrona el numero de bloques fuera de lugar.
 	 * @return
@@ -167,6 +176,24 @@ public class Board
 		
 		return retorno;
 		
+	}
+
+	/****************************************************************************************
+	 * Comparare la matriz tiles con una dada para identificar si un tablero es igual al otro
+	 */
+	@Override
+	public int compareTo(Object ob) {
+		int control=0;
+		//Recorro la matriz temporal y la actual para verificar si se trata del mismo tablero
+		Board temp = (Board) ob;
+		for(int i = 0; i<size;i++){
+			for(int j = 0; j<size;j++){
+				if(temp.tiles[i][j] == tiles[i][j]) control++;
+			}
+		}
+		//Inicio analisis de la variable control que se modifico mediante el recorrido de las dos matrices
+		if(control==size) {return 0;} //Ambos tableros son iguales.
+		else{return 1;}//Ambos tableros son diferentes.		
 	}
 	
 
