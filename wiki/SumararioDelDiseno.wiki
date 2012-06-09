@@ -22,3 +22,4 @@ La clase Recuadro con tiene los siguientes parámetros
   * int *row_obj, col_obj* contendrán la posición objetivo o meta.
   * int *num*, contendrá el valor que representa el *cuadrado*.
   * int *prioridadM* valor de la prioridad manhattan de ese cuadro especifico.
+  * int *size* es el tamaño del tablero que se esta resolviendo; se usa para hallar la prioridad Manhattan.
