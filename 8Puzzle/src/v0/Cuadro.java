@@ -2,7 +2,11 @@ package v0;
 
 /**********************************************************************************
  * 
+ * Este objeto representa un cuadro de la matriz del juego.
  * 
+ * Se construye con la posicion actual en la matriz y la 
+ * posicion que deberia tener para realizar el calculo de la prioridad
+ * Manhattan.
  * 
  * @author dsm
  *
@@ -12,56 +16,36 @@ public class Cuadro {
 	int row,col,row_obj,col_obj;
 	int num;
 	int prioridadM;
-	int size; //Tamaño del tablero que se obtiene de la matriz meta.
 	
-	/************************************************************************
-	 *  Constructor del cuadrado
-	 * @param row -> Filas
-	 * @param col  -> Columnas
-	 * @param num  -> Numero a contener
-	 * @param meta	-> Matriz con la meta a alcanzar.
-	 *************************************************************************/
-	public Cuadro(int row,int col, int num, int[][] meta)
+	
+	/**
+	 * Constructor del objeto cuadro
+	 * @param row -> Fila actual
+	 * @param col -> Columna actual
+	 * @param num -> numero del objeto
+	 * @param row_obj -> Fila en la que deberia tener
+	 * @param col_obj -> Columna en la que deberia estar el numero
+	 */
+	public Cuadro(int row,int col, int num, int row_obj, int col_obj)
 	{
 		this.row = row;
 		this.col = col;
 		this.num = num;
-		size = meta.length;
-		prioridadM = manhattan(meta);
+		this.row_obj = row_obj;
+		this.col_obj = col_obj;
+		if(num != 0) {prioridadM = manhattan();}
+		else {prioridadM = 0;}
 		
 	}
 	
-	private int manhattan(int[][] meta)
+	/**
+	 * Calculo simple de la prioridad Manhattan.
+	 * @return
+	 */
+	private int manhattan()
 	{
-		int[] indices = new int[2];//Esta variable almacena fila y columna retornados por find()
 		int prioridadM=0;
-		indices = find (num,meta);
-		prioridadM = Math.abs(indices[0] - row) + Math.abs(indices[1] - col);
-		/*
-		for(int i = 0; i<size ; i++){
-			for(int j = 0; j<size;j++){
-				if(!(meta[i][j] == num) && num != 0){
-					indices = find(num,meta);
-					prioridadM += Math.abs(indices[0] - i) + Math.abs(indices[1] - j);
-				}
-			}
-		}//Fin recorrido de la matriz*/
+		prioridadM = Math.abs(row_obj - row) + Math.abs(col_obj - col);
 		return prioridadM;		
-	}
-	
-	private int[] find(int number,int[][] meta)
-	{ 
-		int[] poss = new int[2];
-		for(int i = 0; i<size ; i++){
-			for(int j = 0; j<size;j++){
-				if((number == meta[i][j])){					
-					poss[0] = i;
-					poss[1] = j;
-					return poss;
-				}
-			}
-		}//Fin recorrido de la matriz
-		poss = null;
-		return poss;//Se retorna null en caso de estar buscando un elemento que no esta en la matriz
 	}
 }

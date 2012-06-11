@@ -13,8 +13,7 @@ public class Board implements Comparable
 	/************************************************************************
 	 * 							ATRIBUTOS DEL TABLERO
 	 ************************************************************************/
-	int id;//Cada posible solucion se le dara un ID unico con el objetivo de evitar estados repetidos.
-	int[][] tiles;
+	Cuadro[][] tiles;
 	int[][] meta;//Cada objeto tablero contara con un tablero solucionado para realizar operaciones
 	int size;
 	int num_movimientos;
@@ -36,28 +35,10 @@ public class Board implements Comparable
 	 * @param num_movimiento
 	 * @param tiles_ant
 	 ****************************************************************************/
-	public Board(int[][] tiles, int num_movimiento, Board tiles_ant,int id)
+	public Board(Cuadro[][] tiles, int num_movimiento, Board tiles_ant)
 	{	
-		this.id = id;
 		this.tiles = tiles;
 		this.size = tiles.length;
-		  ////////////////////////////////////////////////////////////
-		 ////////Inicia construccion del tablero meta////////////////
-		////////////////////////////////////////////////////////////
-		int num = 1;//Variable usada para construir tablero meta
-		meta = new int[size][size];
-		
-		for(int i = 0; i<size;i++){
-			for(int j = 0; j<size;j++){
-				if(num != size*size){
-					meta[i][j] = num++;
-				}else{
-					meta[i][j] = 0;
-				}
-				
-			}
-			
-		}//Fin de la construccion del tablero meta.
 		this.num_movimientos = num_movimiento;
 		if(num_movimientos != 0) {ant = tiles_ant;}
 		else{ant = null;}
@@ -69,7 +50,7 @@ public class Board implements Comparable
 	/**
 	 * Retrona el numero de bloques fuera de lugar.
 	 * @return
-	 */
+	 
 	public int hamming()
 	{
 		int prioridadH=0;
@@ -81,7 +62,7 @@ public class Board implements Comparable
 			}
 		}//Fin recorrido de la matriz
 		return prioridadH + num_movimientos;		
-	}
+	} */
 	
 	/**
 	 * Retorna la suma de distancia Manhattan entre bloques
@@ -89,44 +70,17 @@ public class Board implements Comparable
 	 */
 	public int manhattan()
 	{
-		int[] indices = new int[2];//Esta variable almacena fila y columna retornados por find()
 		int prioridadM=0;
 		for(int i = 0; i<size ; i++){
 			for(int j = 0; j<size;j++){
-				if(!(meta[i][j] == tiles[i][j]) && tiles[i][j] != 0){
-					indices = find(tiles[i][j]);
-					prioridadM += Math.abs(indices[0] - i) + Math.abs(indices[1] - j);
+					prioridadM += tiles[i][j].prioridadM;
 				}
 			}
-		}//Fin recorrido de la matriz
+		
 		return prioridadM + num_movimientos;		
 	}
 	
-	/**
-	 * Metodo privado que sirve a auxiliar para el metodo Mahatan.
-	 * 
-	 * Recibe el numero a buscar y retorna un arreglo de dimension dos
-	 * con la fila y la columna en donde se encuentra dicho numero dentro de la matriz
-	 * que se esta analizando. 
-	 * @param nummber
-	 * @return
-	 */
 	
-	private int[] find(int number)
-	{ 
-		int[] poss = new int[2];
-		for(int i = 0; i<size ; i++){
-			for(int j = 0; j<size;j++){
-				if((number == meta[i][j])){					
-					poss[0] = i;
-					poss[1] = j;
-					return poss;
-				}
-			}
-		}//Fin recorrido de la matriz
-		poss = null;
-		return poss;//Se retorna null en caso de estar buscando un elemento que no esta en la matriz
-	}
 	
 	/**
 	 * Hace  que el tablero sea iual
@@ -172,14 +126,15 @@ public class Board implements Comparable
 			}
 		}//fin ciclo
 		
-		retorno+= "\n\n Valor Hamming del tablero: "+hamming();
+		//retorno+= "\n\n Valor Hamming del tablero: "+hamming();
 		
 		return retorno;
 		
 	}
 
 	/****************************************************************************************
-	 * Comparare la matriz tiles con una dada para identificar si un tablero es igual al otro
+	 * OJO SE DEBE CAMBIAR PARA QUE SE COMPARE POR PRIORIDAD, DE ESTA MANERA FUNCIONARA
+	 * LA COLA DE PRIORIDAD.
 	 */
 	@Override
 	public int compareTo(Object ob) {
