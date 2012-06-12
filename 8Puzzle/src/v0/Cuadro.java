@@ -33,8 +33,7 @@ public class Cuadro {
 		this.num = num;
 		this.row_obj = row_obj;
 		this.col_obj = col_obj;
-		if(num != 0) {prioridadM = manhattan();}
-		else {prioridadM = 0;}
+		prioridadM = manhattan();
 		
 	}
 	
@@ -45,7 +44,18 @@ public class Cuadro {
 	private int manhattan()
 	{
 		int prioridadM=0;
+		if(num != 0){
 		prioridadM = Math.abs(row_obj - row) + Math.abs(col_obj - col);
-		return prioridadM;		
+		return prioridadM;	
+		}
+		else return 0;
+			
+	}
+	
+	public void swap(int[] newpos)
+	{
+		row = newpos[0];
+		col = newpos[1];
+		prioridadM = manhattan();
 	}
 }

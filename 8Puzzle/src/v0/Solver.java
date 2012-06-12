@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class Solver {
 
 	public Solver(Board initial) {
-
+		
 	}
 
 	public boolean isSolvable() {
@@ -107,7 +107,7 @@ public class Solver {
 		 ************************************************************************/
 
 		Board bd = new Board(board, 0, null);// Tablero inicial
-		System.out.print("Valor Manhatan: " + bd.manhattan()+ "\nValor Hamming: " + "SIN IMPLEMENTAR");
+		//System.out.print("Valor Manhatan: " + bd.manhattan()+ "\nValor Hamming: " + "SIN IMPLEMENTAR");
 		
 
 		
