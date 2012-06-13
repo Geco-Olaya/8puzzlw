@@ -58,4 +58,11 @@ public class Cuadro {
 		col = newpos[1];
 		prioridadM = manhattan();
 	}
+	
+	public String toString()
+	{
+		String retorno = null;
+		retorno = " "+num+" ";
+		return retorno;
+	}
 }
