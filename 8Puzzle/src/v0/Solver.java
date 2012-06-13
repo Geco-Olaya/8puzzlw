@@ -5,12 +5,9 @@ import java.io.FileNotFoundException;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Scanner;
+import java.util.LinkedList;
 
 public class Solver {
-
-	public Solver(Board initial) {
-		
-	}
 
 	public boolean isSolvable() {
 		return false;
@@ -23,11 +20,6 @@ public class Solver {
 	public String toString() {
 		return null;
 	}
-
-	private Board generarCandidatos(Board tablero) {
-		return tablero;
-	}
-
 	
 	/**
 	 * Esta funcion se encarga de buscar los numeros en el tablera meta para
@@ -107,11 +99,36 @@ public class Solver {
 		 ************************************************************************/
 
 		Board bd = new Board(board, 0, null);// Tablero inicial
-		//System.out.print("Valor Manhatan: " + bd.manhattan()+ "\nValor Hamming: " + "SIN IMPLEMENTAR");
+		Solver(bd);
 		
 
 		
 
+	}
+
+	/**
+	 * Se realizara una primera implementacion del solver.
+	 * En esta primera version solo se generaran los vecinos de un cuadro dado;
+	 * se ingresara a la cola de prioridad, y luego se obtendra el de menor prioridad.
+	 * @param initial
+	 */
+	private static void Solver(Board initial) {
+		MinPQ<Board> quee = new MinPQ<Board>();
+		LinkedList<Board> vecinos = new LinkedList<Board>();
+		LinkedList<Board> clone = (LinkedList<Board>) initial.vecinos().clone();
+		vecinos = clone;
+		/*
+		while(!(vecinos.isEmpty())){
+			quee.insert(vecinos.poll());
+		}
+		
+		while(!(quee.isEmpty())){
+			System.out.print(quee.delMin().toString());
+		}*/
+		while(!(vecinos.isEmpty())){
+			System.out.print(vecinos.poll().toString());
+		}
+		
 	}
 
 }

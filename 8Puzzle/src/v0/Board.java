@@ -146,6 +146,7 @@ public class Board implements Comparable<Board> {
 
 			}
 		}// fin ciclo
+		retorno+= "\nPrioridad Manhattan: "+manhattan+"\n\n";
 		return retorno;
 	}
 
@@ -194,18 +195,17 @@ public class Board implements Comparable<Board> {
 	 * vecinos del mismo. El valor manhattan del cuadro que se cambia, se
 	 * modifica mediante la funcion swap que tiene el objeto Cuadro.
 	 * 
-	 * @param newpos
-	 *            -> Debe ser una posicion valida del cero.
+	 * @param newpos-> Debe ser una posicion valida del cero.
 	 * @param cambio
 	 */
 	public Cuadro[][] swap(int[] newpos, Cuadro cambio, Cuadro[][] vecino) {
 		int[] fixpos = new int[2];
 		fixpos = find(cambio.num);
 		Cuadro aux = tiles[newpos[0]][newpos[1]];
-		vecino[newpos[0]][newpos[1]] = cambio;
 		cambio.swap(newpos);
-		vecino[fixpos[0]][fixpos[1]] = aux;
+		vecino[newpos[0]][newpos[1]] = cambio;
 		aux.swap(fixpos);
+		vecino[fixpos[0]][fixpos[1]] = aux;
 		return vecino;
 	}
 
@@ -224,15 +224,23 @@ public class Board implements Comparable<Board> {
 		LinkedList<Board> Board_neig = new LinkedList<Board>();
 		int[] pos0 = new int[2];
 		pos0 = find(0);
-		neig.addLast(ant.tiles);
+		if(ant != null){neig.add(ant.tiles);}
 		/*
 		 * Si la fila se puede incrementar, se mueve el numero debajo del cero
 		 */
 		if (!(pos0[0] + 1 > (size - 1))) {
-			Cuadro[][] vecino = tiles.clone();
-			vecino = swap(pos0, tiles[pos0[0] + 1][pos0[1]], vecino);
-			if (!(neig.contains(vecino))) {
-				neig.addFirst(vecino);
+			Cuadro[][] temp = new Cuadro[size][size];
+			/*
+			for(int i = 0; i< size;i++){
+				for(int j = 0; i < size;i++){
+					temp[i][j] = tiles[i][j].OJO CORREGIR ERROR DE CLONACION
+				}
+			}*/
+			temp=tiles;
+			Cuadro[][] temp2;
+			temp2 = swap(pos0, tiles[pos0[0] + 1][pos0[1]], temp);
+			if (!(neig.contains(temp2))) {
+				neig.addFirst(temp2);
 			}
 		}
 
@@ -240,10 +248,11 @@ public class Board implements Comparable<Board> {
 		 * Si la fila se puede reducir, se mueve el numero encima del cero
 		 */
 		if (!(pos0[0] - 1 < 0)) {
-			Cuadro[][] vecino = tiles.clone();
-			vecino = swap(pos0, tiles[pos0[0] - 1][pos0[1]], vecino);
-			if (!(neig.contains(vecino))) {
-				neig.addFirst((vecino));
+			Cuadro[][] temp = tiles.clone();
+			Cuadro[][] temp2;
+			temp2 = swap(pos0, tiles[pos0[0] - 1][pos0[1]], temp);
+			if (!(neig.contains(temp2))) {
+				neig.addFirst((temp2));
 			}
 		}
 
@@ -252,10 +261,11 @@ public class Board implements Comparable<Board> {
 		 * del cero
 		 */
 		if (!(pos0[1] + 1 > size - 2)) {
-			Cuadro[][] vecino = tiles.clone();
-			vecino = swap(pos0,tiles[pos0[0]][pos0[1]+1],vecino);
-			if (!(neig.contains(vecino))) {
-				neig.addFirst(vecino);
+			Cuadro[][] temp = tiles.clone();
+			Cuadro[][] temp2;
+			temp2 = swap(pos0,tiles[pos0[0]][pos0[1]+1],temp);
+			if (!(neig.contains(temp2))) {
+				neig.addFirst(temp2);
 			}
 		}
 		
@@ -264,10 +274,11 @@ public class Board implements Comparable<Board> {
 		 * del cero
 		 */
 		if(!(pos0[1]-1 < 0)){
-			Cuadro[][] vecino = tiles.clone();
-			vecino = swap(pos0,tiles[pos0[0]][pos0[1]-1],vecino);
-			if (!(neig.contains(vecino))) {
-				neig.addFirst(vecino);
+			Cuadro[][] temp = tiles.clone();
+			Cuadro[][] temp2;
+			temp2 = swap(pos0,tiles[pos0[0]][pos0[1]-1],temp);
+			if (!(neig.contains(temp2))) {
+				neig.addFirst(temp2);
 			}
 		}
 		if(!(neig.isEmpty())){neig.removeLast();}
