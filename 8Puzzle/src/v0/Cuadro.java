@@ -65,15 +65,19 @@ public class Cuadro implements Cloneable{
 		retorno = " "+num+" ";
 		return retorno;
 	}
+	/**
+	 * Metodo clone que esta dando problemas por no comprender 
+	 * bien su implementacion.
+	 */
 	public Object  clone()
 	{
-		Cuadro obj = null;
+		Object obj = null;
 		try{
-			obj = (Cuadro)super.clone();			
+			obj = super.clone();			
 		}catch(CloneNotSupportedException ex){
 			System.out.println("El objeto no se puede duplicar");
 		}
-		obj = (Cuadro)obj.clone();
+		//obj = (Cuadro)obj.clone();
 		/*
 		for(int i = 0; i<obj.tiles.length; i++){
 			obj.tiles[i] = (Cuadro[])obj.tiles[i].clone();
