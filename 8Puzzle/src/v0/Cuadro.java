@@ -12,7 +12,7 @@ package v0;
  *
  */
 
-public class Cuadro {
+public class Cuadro implements Cloneable{
 	int row,col,row_obj,col_obj;
 	int num;
 	int prioridadM;
@@ -64,5 +64,20 @@ public class Cuadro {
 		String retorno = null;
 		retorno = " "+num+" ";
 		return retorno;
+	}
+	public Object  clone()
+	{
+		Cuadro obj = null;
+		try{
+			obj = (Cuadro)super.clone();			
+		}catch(CloneNotSupportedException ex){
+			System.out.println("El objeto no se puede duplicar");
+		}
+		obj = (Cuadro)obj.clone();
+		/*
+		for(int i = 0; i<obj.tiles.length; i++){
+			obj.tiles[i] = (Cuadro[])obj.tiles[i].clone();
+		}*/
+		return obj;
 	}
 }
