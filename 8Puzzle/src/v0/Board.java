@@ -209,10 +209,11 @@ public class Board implements Comparable<Board>{
 	 * @param newpos-> Debe ser una posicion valida del cero.
 	 * @param cambio
 	 */
-	public Cuadro[][] swap(int[] newpos, Cuadro cambio, Cuadro[][] vecino) {
+	public Cuadro[][] swap(int[] newpos, Cuadro cambioSinClon, Cuadro[][] vecino) {
 		int[] fixpos = new int[2];
+		Cuadro cambio =  (Cuadro)cambioSinClon.clone();
 		fixpos = find(cambio.num);
-		Cuadro aux = vecino[newpos[0]][newpos[1]];
+		Cuadro aux = (Cuadro)vecino[newpos[0]][newpos[1]].clone();
 		vecino[newpos[0]][newpos[1]] = cambio;
 		cambio.swap(newpos);
 		vecino[fixpos[0]][fixpos[1]] = aux;
@@ -256,7 +257,7 @@ public class Board implements Comparable<Board>{
 			Cuadro[][] temp2;
 			temp2 = swap(pos0, temp[pos0[0] + 1][pos0[1]], temp);
 			if (!(neig.contains(temp2))) {
-				neig.addFirst(temp2);
+				neig.addFirst(temp2.clone());
 			}
 		}
 
@@ -269,9 +270,9 @@ public class Board implements Comparable<Board>{
 				temp[i]=(Cuadro[])tiles[i].clone();
 			}
 			Cuadro[][] temp2;
-			temp2 = swap(pos0, tiles[pos0[0] - 1][pos0[1]], temp);
+			temp2 = swap(pos0, temp[pos0[0] - 1][pos0[1]], temp);
 			if (!(neig.contains(temp2))) {
-				neig.addFirst((temp2));
+				neig.addFirst((temp2.clone()));
 			}
 		}
 
@@ -285,9 +286,9 @@ public class Board implements Comparable<Board>{
 				temp[i]=(Cuadro[])tiles[i].clone();
 			}
 			Cuadro[][] temp2;
-			temp2 = swap(pos0,tiles[pos0[0]][pos0[1]+1],temp);
+			temp2 = swap(pos0,temp[pos0[0]][pos0[1]+1],temp);
 			if (!(neig.contains(temp2))) {
-				neig.addFirst(temp2);
+				neig.addFirst(temp2.clone());
 			}
 		}
 		
@@ -301,15 +302,15 @@ public class Board implements Comparable<Board>{
 				temp[i]=(Cuadro[])tiles[i].clone();
 			}
 			Cuadro[][] temp2;
-			temp2 = swap(pos0,tiles[pos0[0]][pos0[1]-1],temp);
+			temp2 = swap(pos0,temp[pos0[0]][pos0[1]-1],temp);
 			if (!(neig.contains(temp2))) {
-				neig.addFirst(temp2);
+				neig.addFirst(temp2.clone());
 			}
 		}
 		if(!(neig.isEmpty()) && (ant != null)){neig.removeLast();}
 		//num_movimientos++;
 		while(!(neig.isEmpty())){
-			Board Bvecino = new Board(neig.pollFirst(),num_movimientos,this);
+			Board Bvecino = new Board(neig.pollFirst(),0,this);//num_movimientos
 			Board_neig.add(Bvecino);
 		}
 		return Board_neig;
