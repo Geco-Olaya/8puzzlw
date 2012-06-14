@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.Scanner;
 import java.util.LinkedList;
 
+@SuppressWarnings("unused")
 public class Solver {
 
 	public boolean isSolvable() {
