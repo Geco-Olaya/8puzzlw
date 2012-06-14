@@ -18,7 +18,7 @@ public class Board implements Comparable<Board>{
 	int size;
 	int num_movimientos;
 	int hamming = 0;// Solo usaremos para esta version la prioridad Manhattan;
-	int manhattan;
+	int manhattan=0;
 	Board ant;
 
 	/************************************************************************
@@ -32,20 +32,18 @@ public class Board implements Comparable<Board>{
 	 * @param num_movimiento
 	 * @param tablero_ant
 	 ****************************************************************************/
-	public Board(Cuadro[][] tab, int num_movimiento, Board tablero_ant) {
+	public Board(Cuadro[][] tab, int num_movimiento, Board tablero_ant) 
+	{
 		this.tiles = tab;
 		this.size = tiles.length;
 		this.num_movimientos = num_movimiento;
-		manhattan = manhattan(tab);
 		if (num_movimientos != 0) {
 			ant = tablero_ant;
 		} else {
 			ant = null;
 		}
 		
-		
-		
-
+		manhattan = manhattan(tiles);
 	}
 
 	/**************************************************************************
@@ -140,7 +138,7 @@ public class Board implements Comparable<Board>{
 
 	public String toString() {
 		String retorno = null;
-		retorno = "Tablero a resolver: \n\n";
+		retorno = "Tablero: \n\n";
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
 				if (j + 1 == size) {
@@ -152,6 +150,8 @@ public class Board implements Comparable<Board>{
 				} else {
 					if(tiles[i][j].num != 0){
 					retorno += tiles[i][j] + " | ";
+					}else{
+						retorno += "    | ";
 					}
 				}
 
@@ -239,17 +239,14 @@ public class Board implements Comparable<Board>{
 		if(ant != null){neig.add(ant.tiles);}
 		/*
 		 * Si la fila se puede incrementar, se mueve el numero debajo del cero
-		 * 
-		 * 
-		 * 
-		 * ERROR FATAL
-		 * 
-		 * INVESTIGAR POR ESTE LADO; LA VARIABLE TILES SIGUE CAMBIANDO A RAIZ
-		 * DEL SWAP REALIZADO POR LA CLASE CUADRO
 		 */
 		if (!(pos0[0] + 1 > (size - 1))) {
 			//Con este metodo y la modificacion del metetodo clone
 			//se soluciono el problema de clonacion de la revision anterior
+			//OJO!!!!!
+			//Solo clona las posiciones de la matriz del cuadrado.
+			//Para cambiar las posociones (o punteros) de los cuadros es necesario.
+			//Clonar el cuadro de manera indiviual. Esto se realiza dentro del metodo swap
 			Cuadro[][] temp = (Cuadro[][])tiles.clone();
 			for(int i=0;i<tiles.length;i++){
 				temp[i]=(Cuadro[])tiles[i].clone();

@@ -114,21 +114,22 @@ public class Solver {
 	 * @param initial
 	 */
 	private static void Solver(Board initial) {
-		MinPQ<Board> quee = new MinPQ<Board>();
+		MinPQ<Board> quee = new MinPQ<Board>();//Cola prioridad
 		LinkedList<Board> vecinos = new LinkedList<Board>();
 		LinkedList<Board> clone = (LinkedList<Board>) initial.vecinos().clone();
 		vecinos = clone;
-		/*
+		
 		while(!(vecinos.isEmpty())){
 			quee.insert(vecinos.poll());
 		}
 		
 		while(!(quee.isEmpty())){
 			System.out.print(quee.delMin().toString());
-		}*/
+		}
+		/*
 		while(!(vecinos.isEmpty())){
 			System.out.print(vecinos.poll().toString());
-		}
+		}*/
 		
 	}
 
