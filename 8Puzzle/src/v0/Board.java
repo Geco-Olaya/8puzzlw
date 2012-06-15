@@ -78,13 +78,16 @@ public class Board implements Comparable<Board>{
 	}
 
 	/**
-	 * Observa si el tablero es igual
+	 * Recibe un objeto (Board) y compara si la matriz de Cuadros recibida
+	 * es igual a la matriz contenida.
+	 * 
+	 * Si se llama este metodo a travez de un objeto que contenga la matriz
+	 * meta, se podra saber si el objeto Board entregado es una solucion.
 	 */
-	public boolean equals(Object y) {
+	public boolean equals(Board temp) {
 		int control = 0;
 		// Recorro la matriz temporal y la actual para verificar si se trata del
 		// mismo tablero
-		Board temp = (Board) y;
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
 				if (temp.tiles[i][j].num == tiles[i][j].num)
@@ -93,7 +96,7 @@ public class Board implements Comparable<Board>{
 		}
 		// Inicio analisis de la variable control que se modifico mediante el
 		// recorrido de las dos matrices
-		if (control == size) {
+		if (control == size*size) {
 			return true;
 		} // Ambos tableros son iguales.
 		else {
@@ -137,8 +140,9 @@ public class Board implements Comparable<Board>{
 	}
 
 	public String toString() {
-		String retorno = null;
-		retorno = "Tablero: \n\n";
+		String retorno = "";
+		retorno+="---------------\n";
+		//retorno = "Tablero: \n\n";
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
 				if (j + 1 == size) {
@@ -157,7 +161,9 @@ public class Board implements Comparable<Board>{
 
 			}
 		}// fin ciclo
-		retorno+= "Prioridad Manhattan: "+manhattan+"\n\n";
+		//retorno+= "Prioridad Manhattan: "+manhattan+"\n\n";
+		retorno+="---------------";
+		retorno+="\n\n";
 		return retorno;
 	}
 
@@ -169,10 +175,10 @@ public class Board implements Comparable<Board>{
 	@Override
 	public int compareTo(Board temp) {
 		if (temp.manhattan > manhattan) {
-			return 1;
+			return -1;
 		}
 		if (temp.manhattan < manhattan) {
-			return -1;
+			return 1;
 		} else {
 			return 0;
 		}
@@ -185,7 +191,7 @@ public class Board implements Comparable<Board>{
 	 * @param board
 	 * @return
 	 */
-	private int[] find(int number) {
+	public int[] find(int number) {
 		int[] poss = new int[2];
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
@@ -224,11 +230,7 @@ public class Board implements Comparable<Board>{
 	/**
 	 * Genera una lista enlazada con todos los "tiles" vecinos que puede tener
 	 * un objeto del tipo Board.
-	 * 
-	 * En un principio se inserta el tablero anterior con el objetivo de ir comparando
-	 * si la solucion que se obtiene es unica y no se esta regresando a un estado
-	 * anterior.
-	 * 
+	 *  
 	 * @return
 	 */
 	public LinkedList<Board> vecinos() {
@@ -277,7 +279,7 @@ public class Board implements Comparable<Board>{
 		 * Si la columna se puede incrementar, se mueve el numero a la derecha
 		 * del cero
 		 */
-		if (!(pos0[1] + 1 > size - 2)) {
+		if (!(pos0[1] + 1 > size - 1)) {
 			Cuadro[][] temp = (Cuadro[][])tiles.clone();
 			for(int i=0;i<tiles.length;i++){
 				temp[i]=(Cuadro[])tiles[i].clone();
@@ -305,9 +307,9 @@ public class Board implements Comparable<Board>{
 			}
 		}
 		if(!(neig.isEmpty()) && (ant != null)){neig.removeLast();}
-		//num_movimientos++;
+		num_movimientos++;
 		while(!(neig.isEmpty())){
-			Board Bvecino = new Board(neig.pollFirst(),0,this);//num_movimientos
+			Board Bvecino = new Board(neig.pollFirst(),num_movimientos,this);//experimento
 			Board_neig.add(Bvecino);
 		}
 		return Board_neig;
