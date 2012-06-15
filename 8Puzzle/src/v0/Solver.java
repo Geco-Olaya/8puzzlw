@@ -1,21 +1,16 @@
 package v0;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.Scanner;
 import java.util.LinkedList;
 
-@SuppressWarnings("unused")
+
 public class Solver {
 
 	MinPQ<Board> quee;//Cola prioridad
-	Stack<Board> pila;//Pila de resultados.
+	LinkedList<Board> pila;//Pila de resultados.
 	int[][] meta;
 	public Solver(int[][] meta)
 	{
-		pila= new Stack<Board>();
+		pila= new LinkedList<Board>();
 		quee = new MinPQ<Board>();
 		this.meta = meta;
 	}
@@ -43,13 +38,14 @@ public class Solver {
 		int encolados = pila.size();
 		int movimientos = moves();
 		Board temp;
-		Stack<Board> pila_print = new Stack<Board>();
+		LinkedList<Board> pila_print = new LinkedList<Board>();
 		while(!(pila.isEmpty())){
 			pila_print.push(pila.pop());
 		}
+	
 		while(!(pila_print.isEmpty())){
 			temp = pila_print.pop();
-			retorno+= temp.toString();
+			if(!(pila_print.contains(temp))){retorno+= temp.toString();}
 		}
 		retorno+="\n\nEstados encolados: "+encolados;
 		retorno+="\nNumero de movimientos: "+movimientos;
@@ -99,9 +95,9 @@ public class Solver {
 	@SuppressWarnings("unchecked")
 	public void Solver_Method(Board initial,Board meta) {
 		LinkedList<Board> vecinos = new LinkedList<Board>();//Lista enlazada con los vecinos de una Board dado
-		//¿El tablero tiene solucion?
+		//ï¿½El tablero tiene solucion?
 		if(isSolvable(initial)){
-			//¿El tablero ya esta solucionado?
+			//ï¿½El tablero ya esta solucionado?
 			if(initial.manhattan == 0){
 				System.out.print("\n\nEl tablero ingresado ya esta solucionado\n\n");
 				System.exit(0);
@@ -113,15 +109,17 @@ public class Solver {
 			while(!(vecinos.isEmpty())){
 				quee.insert(vecinos.poll());
 			}
+			pila.push(initial);
 			pila.push(quee.delMin());
 			/**
 			 * Mientras lo que hay en la cima de la pila no sea igual
 			 * al tablero meta, se generan vecinos y priorizan, para luego
 			 * poner el de menor prioridad sobre la cima de la pila
 			 */
+			
 			while(!(meta.equals(pila.peek()))){
+				//quee = new MinPQ<Board>();
 				vecinos = pila.peek().vecinos();//Genero los vecinos de la cima de la pila
-				//quee = new MinPQ<Board>();//Limpio la cola de prioridad
 				while(!(vecinos.isEmpty())){
 					quee.insert(vecinos.poll()); //Ingreso los vecinos a la cola de prioridad.
 				}

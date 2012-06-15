@@ -36,7 +36,29 @@ public class Cuadro implements Cloneable{
 		prioridadM = manhattan();
 		
 	}
-	
+	/**
+	 * Re-escritura de los metodos equals y hashCode
+	 */
+	public boolean equals (Object y)
+	{
+		if(y == this)
+			return true;
+		if(y == null)
+			return false;
+		if(!(y instanceof Cuadro))
+			return false;
+		Cuadro temp = (Cuadro)y;
+		if(temp.num == num)
+			return true;
+		return false;
+	}
+	public int hashCode()
+	{
+		int result = 17;
+		result = 31 * result + num;
+		result = 31 * result + prioridadM;
+		return result;
+	}
 	/**
 	 * Calculo simple de la prioridad Manhattan.
 	 * @return
@@ -84,4 +106,5 @@ public class Cuadro implements Cloneable{
 		}*/
 		return obj;
 	}
+	
 }

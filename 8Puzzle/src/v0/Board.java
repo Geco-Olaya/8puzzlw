@@ -1,12 +1,9 @@
 package v0;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-@SuppressWarnings("unused")
+
 public class Board implements Comparable<Board>{
 
 	/************************************************************************
@@ -84,7 +81,7 @@ public class Board implements Comparable<Board>{
 	 * Si se llama este metodo a travez de un objeto que contenga la matriz
 	 * meta, se podra saber si el objeto Board entregado es una solucion.
 	 */
-	public boolean equals(Board temp) {
+	/*public boolean equals(Board temp) {
 		int control = 0;
 		// Recorro la matriz temporal y la actual para verificar si se trata del
 		// mismo tablero
@@ -101,7 +98,46 @@ public class Board implements Comparable<Board>{
 		} // Ambos tableros son iguales.
 		else {
 			return false;
-		}// Ambos tableros son diferentes. */
+		}// Ambos tableros son diferentes. 
+	} */
+	/**
+	 * Redefinicion del metodo equals
+	 */
+	public boolean equals (Object y)
+	{
+		if(y == null)
+			return false;
+		if(y == this)
+			return true;
+		if(!(y instanceof Board))
+			return false;
+		Board temp = (Board)y;
+		int control = 0;
+		// Recorro la matriz temporal y la actual para verificar si se trata del
+		// mismo tablero
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
+				if (temp.tiles[i][j].num == tiles[i][j].num)
+					control++;
+			}
+		}
+		// Inicio analisis de la variable control que se modifico mediante el
+		// recorrido de las dos matrices
+		if (control == size*size) {
+			return true;
+		} // Ambos tableros son iguales.
+		else {
+			return false;
+		}// Ambos tableros son diferentes.
+	}
+	/**
+	 * Redifinicion del metodo hashCode.
+	 */
+	public int hashCode()
+	{
+		int result=17;
+		result = 31 * result + (tiles != null ? tiles.hashCode() : 0);
+		return result;
 	}
 
 	/**
@@ -255,9 +291,7 @@ public class Board implements Comparable<Board>{
 			}
 			Cuadro[][] temp2;
 			temp2 = swap(pos0, temp[pos0[0] + 1][pos0[1]], temp);
-			if (!(neig.contains(temp2))) {
-				neig.addFirst(temp2.clone());
-			}
+			neig.addFirst(temp2.clone());
 		}
 
 		/*
@@ -270,9 +304,7 @@ public class Board implements Comparable<Board>{
 			}
 			Cuadro[][] temp2;
 			temp2 = swap(pos0, temp[pos0[0] - 1][pos0[1]], temp);
-			if (!(neig.contains(temp2))) {
-				neig.addFirst((temp2.clone()));
-			}
+			neig.addFirst((temp2.clone()));
 		}
 
 		/*
@@ -286,9 +318,8 @@ public class Board implements Comparable<Board>{
 			}
 			Cuadro[][] temp2;
 			temp2 = swap(pos0,temp[pos0[0]][pos0[1]+1],temp);
-			if (!(neig.contains(temp2))) {
-				neig.addFirst(temp2.clone());
-			}
+			neig.addFirst(temp2.clone());
+			
 		}
 		
 		/*
@@ -302,17 +333,26 @@ public class Board implements Comparable<Board>{
 			}
 			Cuadro[][] temp2;
 			temp2 = swap(pos0,temp[pos0[0]][pos0[1]-1],temp);
-			if (!(neig.contains(temp2))) {
-				neig.addFirst(temp2.clone());
-			}
+			neig.addFirst(temp2.clone());
+			
 		}
-		if(!(neig.isEmpty()) && (ant != null)){neig.removeLast();}
+		/*Experimentando para eliminar tableros repetidos
+		 * 
+		 */
+		if(!(neig.isEmpty()) && (ant != null)){
+			Board anterior = new Board(neig.pollLast(),num_movimientos,null);
+			Board_neig.add(anterior);
+		}
 		num_movimientos++;
 		while(!(neig.isEmpty())){
 			Board Bvecino = new Board(neig.pollFirst(),num_movimientos,this);//experimento
-			Board_neig.add(Bvecino);
+			if(!(Board_neig.contains(Bvecino))){
+				Board_neig.addFirst(Bvecino);
+			}else{}
 		}
+		if(ant != null){Board_neig.removeLast();}
 		return Board_neig;
+		
 	}
 
 }
