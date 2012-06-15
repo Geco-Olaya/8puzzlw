@@ -10,16 +10,50 @@ import java.util.LinkedList;
 @SuppressWarnings("unused")
 public class Solver {
 
-	public boolean isSolvable() {
-		return false;
+	MinPQ<Board> quee;//Cola prioridad
+	Stack<Board> pila;//Pila de resultados.
+	int[][] meta;
+	public Solver(int[][] meta)
+	{
+		pila= new Stack<Board>();
+		quee = new MinPQ<Board>();
+		this.meta = meta;
+	}
+	/**
+	 *Decide si el tablero tiene solucion o no.
+	 */
+	public boolean isSolvable(Board tablero) {
+		int[] poss = new int[2];
+		poss = tablero.find(0);
+		if(poss == null){return false;}
+		else{return true;}
 	}
 
-	public int moves() {
-		return 0;
+	/**
+	 * Retorna el numero de movimientos
+	 * @return
+	 */
+	public int moves() 
+	{
+		return pila.peek().num_movimientos;
 	}
 
 	public String toString() {
-		return null;
+		String retorno = "";
+		int encolados = pila.size();
+		int movimientos = moves();
+		Board temp;
+		Stack<Board> pila_print = new Stack<Board>();
+		while(!(pila.isEmpty())){
+			pila_print.push(pila.pop());
+		}
+		while(!(pila_print.isEmpty())){
+			temp = pila_print.pop();
+			retorno+= temp.toString();
+		}
+		retorno+="\n\nEstados encolados: "+encolados;
+		retorno+="\nNumero de movimientos: "+movimientos;
+		return retorno;
 	}
 	
 	/**
@@ -31,7 +65,7 @@ public class Solver {
 	 * @param meta
 	 * @return
 	 */
-	private static int[] find(int number,int[][] meta)
+	public int[] find(int number)
 	{ 
 		int size = meta.length;
 		int[] poss = new int[2];
@@ -54,58 +88,7 @@ public class Solver {
 	 * 
 	 * @param args
 	 */
-	public static void main(String[] args) {
-
-		/************************************************************************
-		 * INICIA CAPTURA DESDE LA ENTRADA ESTANDAR PARA CONSTRUIR EL TABLERO.
-		 * 
-		 ************************************************************************/
-		Scanner sc = new Scanner(System.in);
-		int size = Integer.parseInt(sc.nextLine());
-		Cuadro[][] board = new Cuadro[size][size];
-		// ////////////////////Construyo tablero meta para analizarlo.
-		int[][] meta;
-		int num = 1;// Variable usada para construir tablero meta
-		meta = new int[size][size];
-
-		for (int i = 0; i < size; i++) {
-			for (int j = 0; j < size; j++) {
-				if (num != size * size) {
-					meta[i][j] = num++;
-				} else {
-					meta[i][j] = 0;
-				}
-
-			}
-		}
-		// //////////////////////////////////////////////////////////////////////////
-		// ///////////////////////////////FIN CONSTRUCCION TABLERO
-		// META/////////////
-
-		// //////////////////////////////////////////////////////////////
-		// //////////Construye la matriz del tablero////////////////////
-		int[] pos = new int[2];// /Contendra los valores objetivo de cada
-								// numero.
-		int numero; // /Contendra el valor numero de cada objeto Cuadro.
-		for (int i = 0; i < size; i++) {
-			for (int j = 0; j < size; j++) {
-				numero = sc.nextInt();
-				pos = find(numero, meta);
-				board[i][j] = new Cuadro(i, j, numero, pos[0], pos[1]);
-			}
-		}
-		/************************************************************************
-		 * FIN CAPTURA DESDE LA ENTRADA ESTANDAR PARA CONSTRUIR EL TABLERO.
-		 * 
-		 ************************************************************************/
-
-		Board bd = new Board(board, 0, null);// Tablero inicial
-		Solver(bd);
-		
-
-		
-
-	}
+	
 
 	/**
 	 * Se realizara una primera implementacion del solver.
@@ -113,24 +96,41 @@ public class Solver {
 	 * se ingresara a la cola de prioridad, y luego se obtendra el de menor prioridad.
 	 * @param initial
 	 */
-	private static void Solver(Board initial) {
-		MinPQ<Board> quee = new MinPQ<Board>();//Cola prioridad
-		LinkedList<Board> vecinos = new LinkedList<Board>();
-		LinkedList<Board> clone = (LinkedList<Board>) initial.vecinos().clone();
-		vecinos = clone;
-		
-		while(!(vecinos.isEmpty())){
-			quee.insert(vecinos.poll());
+	@SuppressWarnings("unchecked")
+	public void Solver_Method(Board initial,Board meta) {
+		LinkedList<Board> vecinos = new LinkedList<Board>();//Lista enlazada con los vecinos de una Board dado
+		//¿El tablero tiene solucion?
+		if(isSolvable(initial)){
+			//¿El tablero ya esta solucionado?
+			if(initial.manhattan == 0){
+				System.out.print("\n\nEl tablero ingresado ya esta solucionado\n\n");
+				System.exit(0);
+			}
+			
+			//Si llegamos hasta este bloque es porque el tablero es solucionable
+			LinkedList<Board> clone = (LinkedList<Board>) initial.vecinos().clone();
+			vecinos = clone;
+			while(!(vecinos.isEmpty())){
+				quee.insert(vecinos.poll());
+			}
+			pila.push(quee.delMin());
+			/**
+			 * Mientras lo que hay en la cima de la pila no sea igual
+			 * al tablero meta, se generan vecinos y priorizan, para luego
+			 * poner el de menor prioridad sobre la cima de la pila
+			 */
+			while(!(meta.equals(pila.peek()))){
+				vecinos = pila.peek().vecinos();//Genero los vecinos de la cima de la pila
+				//quee = new MinPQ<Board>();//Limpio la cola de prioridad
+				while(!(vecinos.isEmpty())){
+					quee.insert(vecinos.poll()); //Ingreso los vecinos a la cola de prioridad.
+				}
+				pila.push(quee.delMin());
+			}
+			System.out.print(toString());
+			
+		}else{
+			System.out.print("El tablero propuesto no tiene solucion");
 		}
-		
-		while(!(quee.isEmpty())){
-			System.out.print(quee.delMin().toString());
-		}
-		/*
-		while(!(vecinos.isEmpty())){
-			System.out.print(vecinos.poll().toString());
-		}*/
-		
 	}
-
 }
