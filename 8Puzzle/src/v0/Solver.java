@@ -8,20 +8,32 @@ public class Solver {
 	MinPQ<Board> quee;//Cola prioridad
 	LinkedList<Board> pila;//Pila de resultados.
 	int[][] meta;
+	final int[][] insolvable = {{1,2,3,},{4,5,6},{8,7,0}};
+	Cuadro[][] insolv;
+	Board sinsol;
 	public Solver(int[][] meta)
 	{
 		pila= new LinkedList<Board>();
 		quee = new MinPQ<Board>();
 		this.meta = meta;
+		/*
+		 * Se crea una matriz cuadro, con el tablero que no tiene solucion
+		 * y luego se crea un objeto Board con dicho objeto.
+		 * Este sera el que compararemos para saber si el tablero tiene o no solucion
+		 */
+		insolv = new Cuadro[meta.length][meta.length];
+		for(int i =0; i<meta.length;i++){
+			for(int j = 0; j < meta.length;j++){
+				insolv[i][j] = new Cuadro(i,j,insolvable[i][j],0,0);
+			}
+		}
+		sinsol = new Board(insolv,0,null);
 	}
 	/**
 	 *Decide si el tablero tiene solucion o no.
 	 */
 	public boolean isSolvable(Board tablero) {
-		int[] poss = new int[2];
-		poss = tablero.find(0);
-		if(poss == null){return false;}
-		else{return true;}
+		return !(tablero.equals(sinsol));
 	}
 
 	/**
@@ -118,12 +130,17 @@ public class Solver {
 			 */
 			
 			while(!(meta.equals(pila.peek()))){
+				if(isSolvable(pila.peek())){
 				//quee = new MinPQ<Board>();
-				vecinos = pila.peek().vecinos();//Genero los vecinos de la cima de la pila
-				while(!(vecinos.isEmpty())){
-					quee.insert(vecinos.poll()); //Ingreso los vecinos a la cola de prioridad.
+					vecinos = pila.peek().vecinos();//Genero los vecinos de la cima de la pila
+					while(!(vecinos.isEmpty())){
+						quee.insert(vecinos.poll()); //Ingreso los vecinos a la cola de prioridad.
+					}
+					pila.push(quee.delMin());
+				}else{
+					System.out.print("\n\nEl tablero ingresado no tiene solucion!!!! Intente con otro tablero.");
+					break;
 				}
-				pila.push(quee.delMin());
 			}
 			System.out.print(toString());
 			
