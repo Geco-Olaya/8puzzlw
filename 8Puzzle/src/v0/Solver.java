@@ -51,6 +51,18 @@ public class Solver {
 		int movimientos = moves();
 		Board temp;
 		LinkedList<Board> pila_print = new LinkedList<Board>();
+		temp = pila.peek();
+		//Paso experimental para una correcta impresion
+		while(temp != null){
+			pila_print.push(temp);
+			temp = temp.ant;
+		}
+		while(!(pila_print.isEmpty())){
+			temp = pila_print.pop();
+			retorno+=temp.toString();
+		}
+		/*
+		LinkedList<Board> pila_print = new LinkedList<Board>();
 		while(!(pila.isEmpty())){
 			pila_print.push(pila.pop());
 		}
@@ -58,7 +70,7 @@ public class Solver {
 		while(!(pila_print.isEmpty())){
 			temp = pila_print.pop();
 			if(!(pila_print.contains(temp))){retorno+= temp.toString();}
-		}
+		}*/
 		retorno+="\n\nEstados encolados: "+encolados;
 		retorno+="\nNumero de movimientos: "+movimientos;
 		return retorno;
@@ -107,15 +119,15 @@ public class Solver {
 	@SuppressWarnings("unchecked")
 	public void Solver_Method(Board initial,Board meta) {
 		LinkedList<Board> vecinos = new LinkedList<Board>();//Lista enlazada con los vecinos de una Board dado
-		//�El tablero tiene solucion?
+		//El tablero tiene solucion?
 		if(isSolvable(initial)){
-			//�El tablero ya esta solucionado?
+			//El tablero ya esta solucionado?
 			if(initial.manhattan == 0){
 				System.out.print("\n\nEl tablero ingresado ya esta solucionado\n\n");
 				System.exit(0);
 			}
 			
-			//Si llegamos hasta este bloque es porque el tablero es solucionable
+			//Si llegamos hasta este bloque es porque el tablero POSIBLEMENTE es solucionable
 			LinkedList<Board> clone = (LinkedList<Board>) initial.vecinos().clone();
 			vecinos = clone;
 			while(!(vecinos.isEmpty())){
