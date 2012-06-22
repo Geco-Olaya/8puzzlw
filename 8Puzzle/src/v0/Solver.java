@@ -9,6 +9,7 @@ public class Solver {
 	LinkedList<Board> pila;//Pila de resultados.
 	int[][] meta;
 	final int[][] insolvable = {{1,2,3,},{4,5,6},{8,7,0}};
+	final int[][] insolvable4={{1,2,3,4},{5,6,7,8},{9,10,11,12},{13,15,14,0}};//Introducida para soportar tableros de 4x4 Ojo con el verdadero tablero sin solucion
 	Cuadro[][] insolv;
 	Board sinsol;
 	public Solver(int[][] meta)
@@ -21,13 +22,26 @@ public class Solver {
 		 * y luego se crea un objeto Board con dicho objeto.
 		 * Este sera el que compararemos para saber si el tablero tiene o no solucion
 		 */
-		insolv = new Cuadro[meta.length][meta.length];
-		for(int i =0; i<meta.length;i++){
-			for(int j = 0; j < meta.length;j++){
-				insolv[i][j] = new Cuadro(i,j,insolvable[i][j],0,0);
+		if(meta.length<=3){
+			insolv = new Cuadro[meta.length][meta.length];
+			for(int i =0; i<meta.length;i++){
+				for(int j = 0; j < meta.length;j++){
+					insolv[i][j] = new Cuadro(i,j,insolvable[i][j],0,0);
+				}
 			}
+			sinsol = new Board(insolv,0,null);
+			/*
+			 * De lo contrario desarrollamos el proceso para un tablero de 4x4
+			 */
+		}else{
+			insolv = new Cuadro[meta.length][meta.length];
+			for(int i =0; i<meta.length;i++){
+				for(int j = 0; j < meta.length;j++){
+					insolv[i][j] = new Cuadro(i,j,insolvable4[i][j],0,0);
+				}
+			}
+			sinsol = new Board(insolv,0,null);
 		}
-		sinsol = new Board(insolv,0,null);
 	}
 	/**
 	 *Decide si el tablero tiene solucion o no.
@@ -151,7 +165,7 @@ public class Solver {
 					pila.push(quee.delMin());
 				}else{
 					System.out.print("\n\nEl tablero ingresado no tiene solucion!!!! Intente con otro tablero.");
-					break;
+					System.exit(0);
 				}
 			}
 			System.out.print(toString());
