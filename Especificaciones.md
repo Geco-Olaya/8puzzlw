@@ -1,0 +1,62 @@
+#Especificaciones generales del proyecto
+
+# Introducción #
+Este software se diseñó específicamente para solucionar el problema del 8 puzzle y si forma general de N\*N (aunque no esta optimizado para tal fin aún).
+
+Un ejemplo de un tablero de 8 puzzle podría ser el siguiente
+
+|8| 1| 3|
+|:|:-|:-|
+|4|  | 2|
+|7| 5| 6|
+
+Y la solución de un 8 puzzle se observa de la siguiente manera:
+|1| 2| 3|
+|:|:-|:-|
+|4| 5| 6|
+|7| 8|  |
+Para llegar esta solución se implemento el algoritmo A**(el mismo algoritmo que utilizaban los fantasmas del Pacman para seguirlo)**
+
+### IDE y lenguaje Utilizado ###
+Este proyecto se trabajó con el IDE Eclipse, y su extensión SVN para controlar versiones. El lenguaje utilizado fue Java 1.6.
+---
+
+# Detalles del Software #
+
+### Clase Cuadro ###
+Es el objeto mas "pequeño" del programa, ya que es la base del tablero. Un tablero como tal es una matriz de Cuadros.
+
+Cada Cuadro contiene la columna y fila que ocupa en la matriz de Cuadros, y contiene la fila y la columna en la debería estar para ser una solución. También contiene el numero que se la a asignado y que no cambia en todo el proceso.
+
+Cada Cuadro genera su propia prioridad Mahattan de esta manera desde la clase Board el Manhattan se calculara sumando las prioridades ya encontradas en cada Cuadro. Contiene un método toString que retorna el numero acompañado por espacio al blanco al principio y al final
+
+### Clase Board ###
+Este archivo es el que se encarga de recibir un tablero (que se genera por entrada estándar desde la clase Main [explica mas abajo](se.md) ) y generar sus vecinos. En esta generación se realizan una serie de clonaciones, por lo que fue necesario implementar Cloneable desde Object para poder realizar dichas funciones.
+
+Los vecinos generados se insertan en una lista doblemente enlazada y son retornados a quien sea que llame dicho método.
+
+Se implemento el metodo compareTo() que ayuda a la cola de prioridad a comparar los objetos del tipo Board por su prioridad.
+
+### Clase Solver ###
+Este objeto es el que se encarga de llamar a Board y pedir los vecinos de un tablero dado, luego se trabaja con la lista doblemente enlazada que devuelve el método Board.vecinos() y se agregan a una cola de prioridad (por mínimos), luego se extrae del tope de la cola de prioridad un objeto y se almacena en una pila. Acto seguido, se le calculan los vecinos a lo que esta en el tope de la pila. Esto se realiza hasta que lo que este en el tope de la cola de prioridad sea un tablero solución.
+
+Después se retorna todo lo que esta en la pila, y se espera que de esa forma se muestren los paso realizados para llegar al objetivo (esta parte aun esta en desarrollo)
+
+### Clase Main ###
+Esta clase genera el tablero meta, y captura desde la entrada estandar el tablero que se quiere solucionar.
+
+# ¿Como interactuar con el software? #
+Se copian todas la clases en un nuevo proyecto de Java (se puede usar cualquier IDE) y se corre. Acto seguido introducir el tablero que se quiere solucionar a través de la entrada estándar. Primero se agrega el tamaño de la matriz (recordar que debe ser cuadrada, por eso solo se introduce un numero para el tamaño)
+Un ejemplo para introducir un tablero seria:
+
+3<p>
+8 1 3 <p>
+4 0 5 <p>
+7 2 6 <p>
+
+Donde 0 representa el Cuadro vacío.<br>
+<br>
+<br>
+<br>
+<br>
+<br>
